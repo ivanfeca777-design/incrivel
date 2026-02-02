@@ -1,0 +1,9 @@
+{
+  "name": "Copy of Amazing Shop - E-commerce Premium",
+  "description": "Plataforma de e-commerce profissional com sistema de rastreamento, checkout com GPS e assistente IA.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ]
+}
