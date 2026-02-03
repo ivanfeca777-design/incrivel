@@ -13,13 +13,13 @@ const Footer: React.FC = () => {
             <div className="mb-4 filter brightness-0 invert">
               <Logo className="h-10" />
             </div>
-            {/* Link Administrativo conforme solicitado: por baixo do logotipo */}
+            {/* Link Administrativo Segregado: Porta secreta para o Gestor Evaristo */}
             <div className="mb-6">
               <Link 
-                to="/login" 
+                to="/admin-control" 
                 className="text-[9px] font-black uppercase tracking-[0.3em] text-gray-500 hover:text-amber-500 transition-all flex items-center gap-2 group w-fit"
               >
-                <i className="fa-solid fa-lock text-[8px] group-hover:scale-110 transition-transform"></i>
+                <i className="fa-solid fa-key text-[8px] group-hover:scale-110 transition-transform"></i>
                 Acesso Restrito
               </Link>
             </div>

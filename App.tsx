@@ -9,6 +9,7 @@ import GeminiAssistant from './components/GeminiAssistant';
 import Footer from './components/Footer';
 import AdminDashboard from './components/AdminDashboard';
 import LoginPage from './components/LoginPage';
+import AdminLoginPage from './components/AdminLoginPage';
 import TrackOrderPage from './components/TrackOrderPage';
 import CheckoutPage from './components/CheckoutPage';
 import SupportPage from './components/SupportPage';
@@ -18,79 +19,44 @@ import UserProfilePage from './components/UserProfilePage';
 const AuthGuard: React.FC<{ children: React.ReactNode, userRole: 'admin' | 'user' | null }> = ({ children, userRole }) => {
   const location = useLocation();
   if (!userRole) {
-    // Redireciona para login se não houver sessão ativa
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
   return <>{children}</>;
 };
 
-// --- Tela de Boas-Vindas (Portão de Entrada Obrigatório) ---
+// --- Tela de Boas-Vindas ---
 const WelcomeScreen: React.FC<{ userRole: 'admin' | 'user' | null }> = ({ userRole }) => {
   const navigate = useNavigate();
   
-  // Redirecionamento automático se já estiver logado
   useEffect(() => {
-    if (userRole) {
-      navigate('/home');
-    }
+    if (userRole === 'admin') navigate('/admin');
+    else if (userRole === 'user') navigate('/home');
   }, [userRole, navigate]);
 
   return (
     <div className="fixed inset-0 z-[200] bg-[#0F172A] flex items-center justify-center overflow-hidden">
-      {/* Background Decorativo */}
       <div className="absolute inset-0 opacity-20 scale-110">
-        <img 
-          src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1920&q=80" 
-          className="w-full h-full object-cover" 
-          alt="Luxury Background" 
-        />
+        <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1920&q=80" className="w-full h-full object-cover" alt="" />
       </div>
       
-      {/* Conteúdo Central */}
       <div className="relative z-10 text-center px-4 max-w-lg w-full animate-in fade-in zoom-in duration-1000">
         <div className="mb-10 flex justify-center">
           <div className="w-28 h-28 bg-amber-500 rounded-[36px] flex items-center justify-center shadow-[0_20px_50px_rgba(251,191,36,0.3)] rotate-12 transition-transform hover:rotate-0 duration-500">
             <i className="fa-solid fa-gem text-white text-5xl"></i>
           </div>
         </div>
-        
-        <h1 className="text-6xl md:text-7xl font-heading font-black text-white mb-4 uppercase italic tracking-tighter leading-none">
-          Amazing <span className="text-amber-500">Shop</span>
-        </h1>
-        
+        <h1 className="text-6xl md:text-7xl font-heading font-black text-white mb-4 uppercase italic tracking-tighter leading-none">Amazing <span className="text-amber-500">Shop</span></h1>
         <div className="h-1 w-20 bg-amber-500 mx-auto mb-6 rounded-full"></div>
-        
-        <p className="text-gray-400 font-bold uppercase tracking-[0.4em] text-[10px] mb-12 italic">
-          Onde a Exclusividade Encontra o Estilo • Luanda
-        </p>
+        <p className="text-gray-400 font-bold uppercase tracking-[0.4em] text-[10px] mb-12 italic">Onde a Exclusividade Encontra o Estilo • Luanda</p>
         
         <div className="flex flex-col gap-4">
-          <button 
-            onClick={() => navigate('/login')}
-            className="w-full bg-white text-[#0F172A] px-12 py-6 rounded-2xl font-heading font-black uppercase tracking-widest hover:bg-amber-500 transition-all shadow-2xl active:scale-95 flex items-center justify-center gap-3 group"
-          >
-            <i className="fa-solid fa-right-to-bracket text-lg group-hover:translate-x-1 transition-transform"></i>
-            Aceder à Minha Conta
+          <button onClick={() => navigate('/login')} className="w-full bg-white text-[#0F172A] px-12 py-6 rounded-2xl font-heading font-black uppercase tracking-widest hover:bg-amber-500 transition-all shadow-2xl active:scale-95 flex items-center justify-center gap-3">
+            <i className="fa-solid fa-right-to-bracket text-lg"></i> Iniciar Shopping
           </button>
-          
-          <button 
-            onClick={() => navigate('/login')}
-            className="w-full bg-transparent border-2 border-white/10 text-white px-12 py-5 rounded-2xl font-heading font-black uppercase tracking-widest text-xs hover:bg-white/5 hover:border-white/30 transition-all flex items-center justify-center gap-3"
-          >
-            <i className="fa-solid fa-user-plus text-lg"></i>
-            Tornar-me Membro
+          <button onClick={() => navigate('/login')} className="w-full bg-transparent border-2 border-white/10 text-white px-12 py-5 rounded-2xl font-heading font-black uppercase tracking-widest text-xs hover:bg-white/5 transition-all">
+            Criar Nova Conta
           </button>
         </div>
-        
-        <div className="mt-16 flex justify-center gap-8 opacity-30">
-          <i className="fa-brands fa-cc-visa text-white text-2xl"></i>
-          <i className="fa-brands fa-cc-mastercard text-white text-2xl"></i>
-          <i className="fa-solid fa-shield-halved text-white text-2xl"></i>
-        </div>
-        
-        <p className="mt-10 text-[9px] text-gray-500 uppercase tracking-widest font-black">
-          &copy; 2025 Amazing Shop Lda. Todos os direitos reservados.
-        </p>
       </div>
     </div>
   );
@@ -113,9 +79,7 @@ const MainStoreLayout: React.FC<{ products: Product[], cart: CartItem[], orders:
           <Route path="/track-order" element={<TrackOrderPage orders={orders} />} />
           <Route path="/support" element={<SupportPage />} />
           <Route path="/profile" element={<UserProfilePage orders={orders} onLogout={onLogout} />} />
-          <Route path="/about" element={<div className="py-32 text-center px-4"><h1 className="text-7xl font-heading font-black mb-10 uppercase italic tracking-tight text-[#0F172A]">Amazing <span className="text-amber-500">Shop</span></h1><p className="text-2xl text-gray-500 font-medium leading-relaxed max-w-2xl mx-auto italic">Excelência em cada detalhe.</p></div>} />
           
-          {/* Dashboard do Gestor */}
           <Route path="/admin" element={
             userRole === 'admin' ? (
               <AdminDashboard 
@@ -125,9 +89,7 @@ const MainStoreLayout: React.FC<{ products: Product[], cart: CartItem[], orders:
                 onUpdateOrders={onUpdateOrders}
                 onLogout={onLogout} 
               />
-            ) : (
-              <Navigate to="/home" replace />
-            )
+            ) : <Navigate to="/home" replace />
           } />
         </Routes>
       </main>
@@ -137,7 +99,6 @@ const MainStoreLayout: React.FC<{ products: Product[], cart: CartItem[], orders:
   );
 };
 
-// --- Páginas de Conteúdo (Simplificadas para o App.tsx) ---
 const HomePage: React.FC<{ products: Product[], onAddToCart: (p: Product) => void }> = ({ products, onAddToCart }) => {
   const featured = products.slice(0, 6);
   return (
@@ -159,7 +120,6 @@ const HomePage: React.FC<{ products: Product[], onAddToCart: (p: Product) => voi
   );
 };
 
-// --- Componente Root ---
 const App: React.FC = () => {
   const [products, setProducts] = useState<Product[]>(() => {
     const saved = localStorage.getItem('amazing_shop_products');
@@ -192,20 +152,13 @@ const App: React.FC = () => {
     sessionStorage.removeItem('amazing_user_role');
   };
 
-  const addToCart = (product: Product) => {
-    setCart(prev => {
-      const existing = prev.find(item => item.id === product.id);
-      if (existing) return prev.map(item => item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item);
-      return [...prev, { ...product, quantity: 1 }];
-    });
-  };
-
   return (
     <Router>
       <div className="min-h-screen flex flex-col font-sans selection:bg-amber-200 antialiased">
         <Routes>
           <Route path="/" element={<WelcomeScreen userRole={userRole} />} />
           <Route path="/login" element={<LoginPage onLoginSuccess={handleLogin} />} />
+          <Route path="/admin-control" element={<AdminLoginPage onLoginSuccess={handleLogin} />} />
           
           <Route path="/*" element={
             <MainStoreLayout 
@@ -213,7 +166,11 @@ const App: React.FC = () => {
               cart={cart}
               orders={orders}
               userRole={userRole}
-              onAddToCart={addToCart}
+              onAddToCart={(product: Product) => setCart(prev => {
+                const existing = prev.find(item => item.id === product.id);
+                if (existing) return prev.map(item => item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item);
+                return [...prev, { ...product, quantity: 1 }];
+              })}
               onUpdateQuantity={(id, delta) => setCart(prev => prev.map(i => i.id === id ? {...i, quantity: Math.max(1, i.quantity + delta)} : i))}
               onRemoveFromCart={(id) => setCart(prev => prev.filter(i => i.id !== id))}
               onOrderComplete={(order) => setOrders(prev => [order, ...prev])}
