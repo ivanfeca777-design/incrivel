@@ -18,20 +18,25 @@ export interface CartItem extends Product {
 export interface Order {
   id: string;
   trackingCode: string;
+  invoiceNumber: string;
   items: CartItem[];
   subtotal: number;
   shipping: number;
   total: number;
   status: 'pending' | 'processing' | 'shipped' | 'delivered';
-  paymentMethod: string;
+  paymentStatus: 'unpaid' | 'pending_validation' | 'paid' | 'rejected';
+  paymentMethod: 'express' | 'transfer' | 'visa' | 'paypal';
+  paymentProof?: string; // Referência ou base64
   customerName: string;
   customerPhone: string;
+  customerEmail: string;
   address: string;
   location?: {
     lat: number;
     lng: number;
   };
   createdAt: string;
+  confirmedAt?: string;
 }
 
 export interface Category {
